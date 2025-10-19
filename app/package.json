@@ -1,0 +1,34 @@
+{
+  "name": "@repo/app",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "pnpm run check:types && pnpm run lint && pnpm run format",
+    "check:types": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
+  },
+  "devDependencies": {
+    "@repo/eslintrc": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^24.8.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "vite": "^7.1.10",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "dependencies": {
+    "@repo/types": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@tanstack/react-router": "^1.133.13",
+    "@tanstack/react-start": "^1.133.13",
+    "nitro": "3.0.1-alpha.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

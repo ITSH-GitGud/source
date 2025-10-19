@@ -1,0 +1,17 @@
+{
+  "name": "@repo/eslintrc",
+  "scripts": {
+    "check": "pnpm run format",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
+  },
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./*.ts": "./*.ts"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "eslint-config-sheriff": "^29.0.0"
+  }
+}

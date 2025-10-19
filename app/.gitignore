@@ -1,0 +1,6 @@
+node_modules/
+gen/
+.tanstack/
+dist/
+.nitro/
+.turbo/

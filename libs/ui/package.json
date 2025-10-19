@@ -1,0 +1,19 @@
+{
+  "name": "@repo/ui",
+  "type": "module",
+  "scripts": {
+    "check": "pnpm run check:types && pnpm run lint && pnpm run format",
+    "check:types": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@repo/eslintrc": "workspace:*"
+  },
+  "dependencies": {
+    "@repo/types": "workspace:*"
+  }
+}

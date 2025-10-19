@@ -1,0 +1,12 @@
+{
+  "name": "@repo/tsconfig",
+  "scripts": {
+    "check": "pnpm run format",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
+  },
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  }
+}

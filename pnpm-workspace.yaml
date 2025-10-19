@@ -1,0 +1,9 @@
+packages:
+  - config/*
+  - app
+  - libs/*
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
+  - unrs-resolver
