@@ -8,23 +8,30 @@
     "check": "turbo run check",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
-    "commit": "commit",
+    "commit": "cz",
     "clean": "rimraf {app,libs,config}/**/{node_modules,dist,.nitro,.turbo,.tanstack,gen} -g && rimraf node_modules",
     "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
-    "@commitlint/prompt-cli": "^20.1.0",
+    "@commitlint/cz-commitlint": "^20.1.0",
+    "commitizen": "^4.3.1",
     "eslint": "^9.38.0",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
+    "inquirer": "^9.3.8",
     "jiti": "^2.6.1",
     "lint-staged": "^16.2.4",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "turbo": "^2.5.8",
     "typescript": "^5.9.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   },
   "devEngines": {
     "runtime": {
