@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1760950764864,
+      "tag": "0000_yielding_mach_iv",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1760952982170,
+      "tag": "0001_many_stephen_strange",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1760981223615,
+      "tag": "0002_fantastic_miss_america",
+      "breakpoints": true
+    }
+  ]
+}
