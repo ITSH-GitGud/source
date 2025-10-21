@@ -5,12 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default async function DevicePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const [device] = await getDevice(params.id);
+  const { id } = await params;
+  const [device] = await getDevice(id);
   if (!device) return notFound();
 
-  const latest = await getLatestDeviceData(params.id, 10);
+  const latest = await getLatestDeviceData(id, 10);
 
   return (
     <div className="space-y-4">
