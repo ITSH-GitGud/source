@@ -30,6 +30,7 @@ import {
   HardDrive,
   ChevronDown,
   Gauge,
+  Wifi,
   type LucideIcon,
 } from "lucide-react";
 
@@ -73,6 +74,11 @@ export function AppSidebar() {
               <NavItem href="/dashboard" icon={Home} label="Dashboard" />
               <DeviceGroup />
               <SensorGroup />
+              <NavItem
+                href="/integrations/unifi"
+                icon={Wifi}
+                label="UniFi Network"
+              />
               <NavItem href="/settings" icon={Settings} label="Settings" />
             </SidebarMenu>
           </SidebarGroupContent>

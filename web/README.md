@@ -1,3 +1,40 @@
+# Web app
+
+## UniFi integration setup
+
+The app includes a UniFi Site Manager integration so users can paste their UniFi API key, select a site/network, save it to their profile, and view live data with charts.
+
+Prerequisites
+
+- A UniFi API key with permissions to read sites and statistics
+- The UniFi cloud base URL
+
+Configure environment
+
+- Add this to your `.env` in `web/`:
+  - `UNIFI_BASE_URL=https://unifi.ui.com`
+  - Ensure existing Better Auth and DB vars are set (see `src/env.js`)
+
+Database
+
+- Generate (already done if migrations exist) and apply the schema:
+  - Run: db:push (applies `unifi_config` table)
+
+Run the app
+
+- Start the dev server: dev
+- Navigate to: `/integrations/unifi`
+  - Enter your UniFi API key
+  - Fetch sites and select one
+  - Save configuration
+  - View the dashboard with charts (fresh data fetched on each load)
+
+Notes
+
+- The backend stores only the selected site and API key per user (Better Auth session required)
+- Data is always fetched live from UniFi cloud endpoints; nothing is cached server-side
+- Set `UNIFI_BASE_URL` to your cloud base if different
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.

@@ -13,7 +13,7 @@ export const env = createEnv({
       .default("development"),
     BETTER_AUTH_SECRET: z.string().min(32),
     BETTER_AUTH_URL: z.string().url(),
-  },
+    },
 
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app

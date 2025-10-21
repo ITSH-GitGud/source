@@ -8,6 +8,7 @@ import * as session from "./schemas/session";
 import * as verification from "./schemas/verification";
 import * as device from "./schemas/device";
 import * as sensor from "./schemas/sensor";
+import * as unifiConfig from "./schemas/unifi-config";
 
 const globalForDb = globalThis as unknown as {
   client: Client | undefined;
@@ -25,5 +26,6 @@ export const db = drizzle(client, {
     ...verification,
     ...device,
     ...sensor,
+    ...unifiConfig,
   },
 });
