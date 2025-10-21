@@ -22,6 +22,16 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Gauge, Loader2, Activity } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
+import {
+  LineChart as RechartsLineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 
 interface Sensor {
   id: string;
@@ -101,6 +111,18 @@ export default function SensorDetailPage() {
     return date.toLocaleString();
   };
 
+  const formatTimeShort = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  // Prepare chart data (reverse to show oldest to newest)
+  const chartData = [...latestData].reverse().map((data) => ({
+    time: formatTimeShort(data.timestamp),
+    voltage: parseFloat(data.value),
+    fullTime: formatDateTime(data.timestamp),
+  }));
+
   if (isLoading) {
     return (
       <div className="container min-w-full space-y-6 py-6">
@@ -179,6 +201,91 @@ export default function SensorDetailPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Voltage Graph Card */}
+      {latestData.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5" />
+              Voltage Over Time
+            </CardTitle>
+            <CardDescription>
+              Visual representation of the last {chartData.length} voltage
+              readings
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <RechartsLineChart data={chartData}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="hsl(var(--border))"
+                />
+                <XAxis
+                  dataKey="time"
+                  tick={{ fill: "var(--foreground)", fontSize: 12 }}
+                  stroke="hsl(var(--border))"
+                />
+                <YAxis
+                  label={{
+                    value: "Voltage (V)",
+                    angle: -90,
+                    position: "insideLeft",
+                    style: {
+                      fill: "var(--foreground)",
+                      fontSize: 14,
+                      fontWeight: 500,
+                    },
+                  }}
+                  tick={{ fill: "var(--foreground)", fontSize: 12 }}
+                  stroke="hsl(var(--border))"
+                  domain={["auto", "auto"]}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "6px",
+                    color: "hsl(var(--foreground))",
+                  }}
+                  labelStyle={{
+                    color: "hsl(var(--foreground))",
+                    fontWeight: 600,
+                    marginBottom: "4px",
+                  }}
+                  formatter={(value: number) => [
+                    `${value.toFixed(2)} V`,
+                    "Voltage",
+                  ]}
+                  labelFormatter={(label, payload) => {
+                    const data = payload?.[0]?.payload as
+                      | { fullTime?: string }
+                      | undefined;
+                    return data?.fullTime ?? String(label);
+                  }}
+                />
+                <Legend
+                  wrapperStyle={{
+                    color: "hsl(var(--foreground))",
+                    fontSize: "14px",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="voltage"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                  dot={{ fill: "#3b82f6", r: 5 }}
+                  activeDot={{ r: 7, fill: "#2563eb" }}
+                  name="Voltage (V)"
+                  connectNulls
+                />
+              </RechartsLineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Latest Sensor Data Card */}
       <Card>
