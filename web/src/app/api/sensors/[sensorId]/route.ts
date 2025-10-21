@@ -5,19 +5,21 @@ import {
   getSensorById,
   updateSensor,
   deleteSensor,
+  getLatestSensorData,
 } from "@/server/db/queries/sensor";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { sensorId: string } },
+  context: { params: Promise<{ sensorId: string }> },
 ) => {
   try {
+    const { sensorId } = await context.params;
     const session = await auth.api.getSession({ headers: req.headers });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [sensor] = await getSensorById(params.sensorId);
+    const [sensor] = await getSensorById(sensorId);
     if (!sensor) {
       return NextResponse.json({ error: "Sensor not found" }, { status: 404 });
     }
@@ -26,9 +28,13 @@ export const GET = async (
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
+    // Get latest sensor data (last 10 readings)
+    const latestData = await getLatestSensorData(sensorId, 10);
+
     return NextResponse.json({
       success: true,
       sensor,
+      latestData,
     });
   } catch (error) {
     console.error("Error retrieving sensor:", error);
@@ -41,15 +47,16 @@ export const GET = async (
 
 export const PATCH = async (
   req: NextRequest,
-  { params }: { params: { sensorId: string } },
+  context: { params: Promise<{ sensorId: string }> },
 ) => {
   try {
+    const { sensorId } = await context.params;
     const session = await auth.api.getSession({ headers: req.headers });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [sensor] = await getSensorById(params.sensorId);
+    const [sensor] = await getSensorById(sensorId);
     if (!sensor) {
       return NextResponse.json({ error: "Sensor not found" }, { status: 404 });
     }
@@ -68,10 +75,7 @@ export const PATCH = async (
       );
     }
 
-    const [updatedSensor] = await updateSensor(
-      params.sensorId,
-      validation.data,
-    );
+    const [updatedSensor] = await updateSensor(sensorId, validation.data);
 
     return NextResponse.json({
       success: true,
@@ -88,15 +92,16 @@ export const PATCH = async (
 
 export const DELETE = async (
   req: NextRequest,
-  { params }: { params: { sensorId: string } },
+  context: { params: Promise<{ sensorId: string }> },
 ) => {
   try {
+    const { sensorId } = await context.params;
     const session = await auth.api.getSession({ headers: req.headers });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [sensor] = await getSensorById(params.sensorId);
+    const [sensor] = await getSensorById(sensorId);
     if (!sensor) {
       return NextResponse.json({ error: "Sensor not found" }, { status: 404 });
     }
@@ -105,7 +110,7 @@ export const DELETE = async (
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await deleteSensor(params.sensorId);
+    await deleteSensor(sensorId);
 
     return NextResponse.json({
       success: true,
@@ -118,4 +123,3 @@ export const DELETE = async (
     );
   }
 };
-

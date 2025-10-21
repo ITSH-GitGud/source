@@ -166,7 +166,13 @@ export default function SensorsPage() {
               </TableHeader>
               <TableBody>
                 {sensors.map((sensor) => (
-                  <TableRow key={sensor.id}>
+                  <TableRow
+                    key={sensor.id}
+                    className="hover:bg-muted/50 cursor-pointer"
+                    onClick={() =>
+                      router.push(`/dashboard/sensors/${sensor.id}`)
+                    }
+                  >
                     <TableCell className="font-medium">{sensor.name}</TableCell>
                     <TableCell>
                       <Badge variant="outline">
@@ -191,7 +197,10 @@ export default function SensorsPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => setDeleteId(sensor.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteId(sensor.id);
+                        }}
                       >
                         <Trash2 className="text-destructive h-4 w-4" />
                       </Button>

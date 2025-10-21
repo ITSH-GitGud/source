@@ -9,7 +9,7 @@ const char* ssid = "MonkataNet"; //TODO: Change for the presentation
 const char* password = "parolanasimozanet"; //TODO: Change for the presentation
 
 // Server URL
-const char* serverUrl = "https://bc7lmt4t-3000.euw.devtunnels.ms/api/esp32/info"; //TODO: FOrward a port
+const char* serverUrl = "https://bc7lmt4t-3000.euw.devtunnels.ms/api/iot/sensors"; //TODO: FOrward a port
 
 //id for device
 const char* deviceId = "esp32_device_001";

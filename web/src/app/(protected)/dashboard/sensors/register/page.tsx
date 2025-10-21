@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -79,33 +80,27 @@ export default function RegisterSensorPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/sensors", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = (await response.json()) as {
-        error?: string;
-        success?: boolean;
-      };
-
-      if (!response.ok) {
-        throw new Error(result.error ?? "Failed to register sensor");
-      }
-
-      toast.success("Sensor registered successfully!");
-      router.push("/dashboard/sensors");
-    } catch (error) {
-      console.error("Registration error:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to register sensor",
+      const response = await axios.post<{ success?: boolean; error?: string }>(
+        "/api/sensors",
+        data,
       );
-    } finally {
-      setIsLoading(false);
+      if (response.data?.success) {
+        toast.success("Sensor registered successfully!");
+        router.push("/dashboard/sensors");
+      } else {
+        throw new Error(response.data?.error ?? "Failed to register sensor");
+      }
+    } catch (err) {
+      let errorMsg = "Failed to register sensor";
+      if (axios.isAxiosError(err)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        errorMsg = err.response?.data?.error ?? err.message ?? errorMsg;
+      } else if (err instanceof Error) {
+        errorMsg = err.message ?? errorMsg;
+      }
+      toast.error(`Error: ${errorMsg}`);
     }
+    setIsLoading(false);
   };
 
   return (

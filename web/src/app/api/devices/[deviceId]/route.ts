@@ -12,10 +12,10 @@ import {
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { deviceId: string } },
+  context: { params: Promise<{ deviceId: string }> },
 ) {
   try {
-    const { deviceId } = params;
+    const { deviceId } = await context.params;
 
     // Get device info
     const deviceInfo = await getDevice(deviceId);

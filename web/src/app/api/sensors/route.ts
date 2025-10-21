@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { registerSensorSchema } from "@/lib/validations/sensor";
 import { createSensor, getUserSensors } from "@/server/db/queries/sensor";
+import { getDevice } from "@/server/db/queries/device";
 
 export const GET = async (req: Request) => {
   try {
@@ -44,6 +45,17 @@ export const POST = async (req: Request) => {
 
     const { id, name, measurementType, deviceId, location } = validation.data;
 
+    // If a deviceId is provided, ensure the device exists to satisfy FK constraint
+    if (deviceId) {
+      const [device] = await getDevice(deviceId);
+      if (!device) {
+        return NextResponse.json(
+          { error: "Device not found", details: { deviceId } },
+          { status: 400 },
+        );
+      }
+    }
+
     const [sensor] = await createSensor({
       id,
       userId: session.user.id,
@@ -59,6 +71,21 @@ export const POST = async (req: Request) => {
     });
   } catch (error) {
     console.error("Error creating sensor:", error);
+    // Handle foreign key constraint error from SQLite
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "SQLITE_CONSTRAINT_FOREIGNKEY"
+    ) {
+      return NextResponse.json(
+        {
+          error: "Foreign key constraint failed. Device may not exist.",
+          details: error,
+        },
+        { status: 400 },
+      );
+    }
     return NextResponse.json(
       { error: "Failed to create sensor" },
       { status: 500 },

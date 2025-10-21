@@ -3,10 +3,10 @@ import { CommandAcknowledgementSchema } from "@/lib/validations/command";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { deviceId: string; commandId: string } },
+  context: { params: Promise<{ deviceId: string; commandId: string }> },
 ) {
   try {
-    const { deviceId, commandId } = params;
+    const { deviceId, commandId } = await context.params;
     const body = CommandAcknowledgementSchema.parse(await req.json());
 
     console.log("✅ Command acknowledged:", {

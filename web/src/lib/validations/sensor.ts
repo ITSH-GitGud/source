@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { id } from "zod/v4/locales";
 
 export const measurementTypes = [
   "tv",
@@ -37,3 +38,21 @@ export const updateSensorSchema = z.object({
 
 export type RegisterSensorInput = z.infer<typeof registerSensorSchema>;
 export type UpdateSensorInput = z.infer<typeof updateSensorSchema>;
+
+// Ingest (hardware) specific schemas — unauthenticated endpoints
+export const iotRegisterSensorSchema = registerSensorSchema.extend({
+    id: z.string().min(1, "Sensor ID is required"),
+    volts: z.number().optional(),
+});
+
+// Accepts flexible value types from hardware. We'll persist as string.
+export const sensorReadingSchema = z.object({
+  // epoch seconds or milliseconds, or ISO string; defaults to now if omitted
+  timestamp: z.union([z.number(), z.string()]).optional(),
+  value: z.union([z.string(), z.number(), z.boolean(), z.record(z.any())]),
+  unit: z.string().optional(),
+  metadata: z.record(z.any()).optional(),
+});
+
+export type IotRegisterSensorInput = z.infer<typeof iotRegisterSensorSchema>;
+export type SensorReadingInput = z.infer<typeof sensorReadingSchema>;
