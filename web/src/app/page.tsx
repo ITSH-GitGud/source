@@ -14,7 +14,7 @@ export default function HomePage() {
       if (isAuthenticated) {
         router.push("/dashboard");
       } else {
-        router.push("/auth/sign-in");
+        router.push("/auth");
       }
     }
   }, [isAuthenticated, isLoading, router]);
